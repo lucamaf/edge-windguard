@@ -1,0 +1,11 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  # container image name
+  name: onnx-model
+  namespace: windguard
+spec:
+  predictor:
+    containers:
+      - name: kserve-container
+        image: quay.io/luferrar/windguard:custom

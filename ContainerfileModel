@@ -1,0 +1,5 @@
+# saved as quay.io/luferrar/windguard:model
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+RUN microdnf install -y wget && microdnf clean all
+RUN mkdir -p /models/fault-prediction/1 && chmod -R 755 /models/fault-prediction/1
+COPY isolation_forest.onnx /models/fault-prediction/1/model.onnx

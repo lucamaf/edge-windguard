@@ -1,0 +1,14 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  # container image name
+  name: fault-prediction
+spec:
+  predictor:
+    model:
+      protocolVersion: v2
+      modelFormat:
+        name: openvino_ir
+      storageUri: "oci://quay.io/luferrar/windguard:model"
+      args:
+      - --layout=NHWC:NCHW 

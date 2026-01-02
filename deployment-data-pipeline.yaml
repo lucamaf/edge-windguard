@@ -1,0 +1,60 @@
+# apiVersion: Specifies the Kubernetes API version to use
+apiVersion: apps/v1
+# kind: Specifies the type of Kubernetes object
+kind: Deployment
+# metadata: Data that helps uniquely identify the object
+metadata:
+  # Name of the Deployment
+  name: data-pipeline-deployment
+  namespace: windguard
+  # Labels to apply to this Deployment
+  labels:
+    app: data-pipeline
+# spec: The desired state for the Deployment
+spec:
+  # The number of desired instances (Pods)
+  replicas: 1
+  # selector: How the Deployment finds which Pods to manage
+  selector:
+    matchLabels:
+      app: data-pipeline
+  # template: The blueprint for the Pods
+  template:
+    metadata:
+      # Labels to apply to each Pod created by this template
+      labels:
+        app: data-pipeline
+    spec:
+      containers:
+      # The list of containers to run in the Pod
+      - name: data-pipeline
+        # IMPORTANT: Replace this with the actual path to your image
+        image: quay.io/luferrar/windguard:data-pipeline
+        # The command to run in the container, taken from your Containerfile CMD
+        command: ["python", "data_pipeline.py"]
+        # Environment variables from your Containerfile's ENV instructions
+        # These should point to your services within the Kubernetes cluster
+        env:
+        - name: MQTT_BROKER_ADDRESS
+          value: "mosquitto.mqtt-broker.svc.cluster.local" # Updated for K8s service name
+        - name: MQTT_BROKER_PORT
+          value: "1883"
+        - name: MQTT_USERNAME
+          value: "admin"
+        - name: MQTT_PASSWORD
+          value: "password"    
+        - name: SCORING_API_URL
+          value: "http://onnx-model-predictor.windguard.svc.cluster.local:8080/v1/models/onnx-model:predict" # Updated for K8s service name
+        - name: FEATURES_FILE_PATH
+          value: "/app/features.csv" # This path is inside the container
+        - name: DATA_PATH
+          value: "/app/comma_0.csv" # This path is inside the container
+        
+        # It's good practice to set resource requests and limits
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m" # 0.25 of a CPU core
+          limits:
+            memory: "512Mi"
+            cpu: "500m" # 0.5 of a CPU core

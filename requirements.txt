@@ -1,0 +1,11 @@
+flask>=2.0
+pandas>=1.3
+requests>=2.20
+paho-mqtt>=1.6
+python-dotenv>=0.20
+# for training and model conversion
+scikit-learn>=1.0
+skl2onnx>=1.10
+onnxruntime>=1.10
+# for testing the model
+numpy>=1.20

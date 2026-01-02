@@ -1,0 +1,33 @@
+#Use the Red Hat UBI 9 base image with Python 3.9
+#FROM registry.access.redhat.com/ubi9/ubi-minimal
+# tagged as quay.io/luferrar/windguard:data-pipeline
+FROM quay.io/fedora/python-311
+#Switch to root user to install system dependencies
+#USER 0
+#Install build dependencies for pandas (gcc, g++) and python C extensions
+#microdnf is the package manager for UBI
+#RUN microdnf install -y gcc-c++ python3-devel && microdnf clean all
+#Switch back to the non-root user (1001) provided by the base image
+#USER 1001
+#Set the working directory inside the container
+WORKDIR /app
+#Copy the requirements file first to leverage Docker layer caching
+COPY requirements-data-pipeline.txt requirements.txt
+#Install Python dependencies
+RUN pip3 install --no-cache-dir -r requirements.txt
+#Copy the application files and data into the container
+COPY data_pipeline.py .
+COPY dataset/Wind_Farm_A/comma_feature_description.csv features.csv
+COPY dataset/Wind_Farm_A/datasets/comma_0.csv comma_0.csv
+#Set default environment variables
+#These can be overridden at runtime (e.g., with 'docker run -e ...')
+ENV MQTT_BROKER_ADDRESS="mosquitto.mqtt-broker.svc.cluster.local"
+ENV MQTT_BROKER_PORT="1883"
+ENV SCORING_API_URL="http://onnx-model-predictor.windguard.svc.cluster.local:8080/v1/models/onnx-model:predict"
+ENV FEATURES_FILE_PATH="/app/features.csv"
+ENV DATA_PATH="/app/comma_0.csv"
+# MQTT Topics
+ENV FEATURE_TOPIC_PREFIX = "features"
+ENV ANOMALY_TOPIC = "anomaly/score"
+#Command to run the application when the container starts
+CMD ["python", "data_pipeline.py"]
