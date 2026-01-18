@@ -24,8 +24,6 @@ graph TD
         H[data pipeline: power monitoring] -- "Power Generation monitoring" --> F(mqtt broker: Mosquitto broker)
         I[data pipeline: fault prediction] -- "Fault prediction" --> D[inference service: KServe]
         I[data pipeline: fault prediction] -- "Fault alerting" --> F(mqtt broker: Mosquitto broker)
-        F -- "Subscribe Telemetry" --> D
-        D -- "Predictive Result" --> G[Failure/Normal Alert]
     end
 ```
 ---
