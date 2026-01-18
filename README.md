@@ -11,6 +11,20 @@ The architecture is built on a decoupled, event-driven model. The **Data Pipelin
 3. **`data_pipeline`**: The data producer. It reads sensor data and publishes it to the broker. In a production environment, this would interface with actual turbine PLCs or IoT gateways.
 4. **`inference_svc`**: The consumer and predictor. Deployed via **KServe**, it subscribes to the broker, runs the telemetry through the trained model, and outputs failure predictions.
 
+```mermaid
+graph TD
+    subgraph "Offline / Training Phase"
+        A[(dataset/)] --> B[train_model: Notebook]
+        B --> C{Random Forest Model}
+    end
+
+    subgraph "Kubernetes Cluster / Real-Time Phase"
+        C -- "Persistent Model Load" --> D[inference_svc: KServe]
+        E[data_pipeline: Deployment] -- "Publish Telemetry" --> F(mqtt_broker: Mosquitto)
+        F -- "Subscribe Telemetry" --> D
+        D -- "Predictive Result" --> G[Failure/Normal Alert]
+    end
+```
 ---
 
 ## Project Structure
@@ -71,6 +85,6 @@ kubectl apply -f data_pipeline/deployment.yaml
 ---
 
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
