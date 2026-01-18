@@ -13,14 +13,17 @@ The architecture is built on a decoupled, event-driven model. The **Data Pipelin
 
 ```mermaid
 graph TD
-    subgraph "Offline / Training Phase"
-        A[(dataset/)] --> B[train_model: Notebook]
-        B --> C{Random Forest Model}
+    subgraph "Offline / Training phase"
+        A[(dataset)] --> B[train model: Python Notebook]
+        B --> C{Random Forest model}
     end
 
-    subgraph "Kubernetes Cluster / Real-Time Phase"
-        C -- "Persistent Model Load" --> D[inference_svc: KServe]
-        E[data_pipeline: Deployment] -- "Publish Telemetry" --> F(mqtt_broker: Mosquitto)
+    subgraph "Real-Time Phase"
+        C -- "ONNX model load" --> D[inference service: KServe]
+        E[data pipeline: ingestion and processing] -- "Publish telemetry" --> F(mqtt broker: Mosquitto broker)
+        H[data pipeline: power monitoring] -- "Power Generation monitoring" --> F(mqtt broker: Mosquitto broker)
+        I[data pipeline: fault prediction] -- "Fault prediction" --> D[inference service: KServe]
+        I[data pipeline: fault prediction] -- "Fault alerting" --> F(mqtt broker: Mosquitto broker)
         F -- "Subscribe Telemetry" --> D
         D -- "Predictive Result" --> G[Failure/Normal Alert]
     end
