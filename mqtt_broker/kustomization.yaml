@@ -1,0 +1,6 @@
+resources:
+- mosquitto-ns.yaml
+- mosquitto-config.yaml
+- mosquitto-password.yaml
+- mosquitto.yaml
+- mosquitto-node.yaml

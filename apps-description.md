@@ -1,6 +1,8 @@
 the python app will read data from the dataset (https://zenodo.org/records/10958775), filtering some of the features available for the 3 wind farms and will send the data through to the MQTT Broker. Based on some easy logic it will also produce on a different topic prediction of power produced and possible faults. HMI will connect to MQTT Broker and show real time data, based on specific topics.
-Will be using 5 features per wind farm (3 wind farms in the dataset), will present sensor data in a table. Will use panda to manipulate dataset, reading in memoy and writing (with sleep to simulate real data) to mosquitto.
+Decide to switch to this dataset: https://www.kaggle.com/code/yohanesnuwara/iiot-wind-turbine-analytics as it is easier
+Will use panda to manipulate dataset, reading in memory and writing (with sleep to simulate real data) to mosquitto.
 
+Since we have labeled data we will use RandomForest instead of IsolationForest (with unbalanced data as explained in the python notebook). For reference read here: https://medium.com/sfu-cspmp/surviving-in-a-random-forest-with-imbalanced-datasets-b98b963d52eb
 Raw deployment modelcar with all apps on microshift (https://developers.redhat.com/articles/2025/06/09/optimize-model-serving-edge-rawdeployment-mode)
 https://docs.redhat.com/en/documentation/red_hat_build_of_microshift/4.20/html/using_ai_models/using-artificial-intelligence-with-microshift#microshift-rhoai-supported-models_microshift-rh-openshift-ai 
 

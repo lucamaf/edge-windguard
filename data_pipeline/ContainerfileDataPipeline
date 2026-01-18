@@ -17,17 +17,15 @@ COPY requirements-data-pipeline.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 #Copy the application files and data into the container
 COPY data_pipeline.py .
-COPY dataset/Wind_Farm_A/comma_feature_description.csv features.csv
-COPY dataset/Wind_Farm_A/datasets/comma_0.csv comma_0.csv
+COPY iiot-combined-dataset.csv .
 #Set default environment variables
 #These can be overridden at runtime (e.g., with 'docker run -e ...')
 ENV MQTT_BROKER_ADDRESS="mosquitto.mqtt-broker.svc.cluster.local"
 ENV MQTT_BROKER_PORT="1883"
 ENV SCORING_API_URL="http://onnx-model-predictor.windguard.svc.cluster.local:8080/v1/models/onnx-model:predict"
-ENV FEATURES_FILE_PATH="/app/features.csv"
-ENV DATA_PATH="/app/comma_0.csv"
+ENV DATA_PATH="/app/iiot-combined-dataset.csv"
 # MQTT Topics
-ENV FEATURE_TOPIC_PREFIX = "features"
-ENV ANOMALY_TOPIC = "anomaly/score"
+#ENV FEATURE_TOPIC_PREFIX = "features"
+#ENV ANOMALY_TOPIC = "anomaly/score"
 #Command to run the application when the container starts
 CMD ["python", "data_pipeline.py"]

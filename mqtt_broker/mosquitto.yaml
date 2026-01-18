@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mosquitto
+  namespace: mqtt-broker
+  labels:
+    app: mosquitto
+spec:
+  ports:
+  - port: 1883
+  selector:
+    app: mosquitto
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mq-pv-claim
+  namespace: mqtt-broker
+  labels:
+    app: mosquitto
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  namespace: mqtt-broker
+  labels:
+    app: mosquitto
+spec:
+  selector:
+    matchLabels:
+      app: mosquitto
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      containers:
+        - image: eclipse-mosquitto:latest
+          name: mosquitto
+          ports:
+          - containerPort: 1883
+            name: mosquitto
+          volumeMounts:
+          - name: mosquitto-persistent-storage
+            mountPath: /mosquitto/data
+          - name: mosquitto-config
+            mountPath: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
+          - name: mosquitto-password
+            mountPath: /mosquitto/config/password.txt
+            subPath: password.txt
+      volumes:
+      - name: mosquitto-persistent-storage
+        persistentVolumeClaim:
+          claimName: mq-pv-claim
+      - name: mosquitto-config
+        configMap:
+          name: mosquitto-config
+      - name: mosquitto-password
+        configMap:
+          name: mosquitto-password

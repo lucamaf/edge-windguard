@@ -9,3 +9,9 @@ skl2onnx>=1.10
 onnxruntime>=1.10
 # for testing the model
 numpy>=1.20
+# python notebook iiot
+matplotlib
+missingno
+seaborn
+imblearn
+lightgbm
