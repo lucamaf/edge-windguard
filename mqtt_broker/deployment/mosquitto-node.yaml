@@ -6,10 +6,8 @@ metadata:
 spec:
   type: NodePort 
   ports:
-      # Which port on the node is the service available through?
     - name: mqtt-port
       nodePort: 31883
-      # Inside the cluster, what port does the service expose?
       port: 1883
       targetPort: 1883
       protocol: TCP

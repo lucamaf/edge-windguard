@@ -1,0 +1,3 @@
+resources:
+- data-pipeline-ns.yaml
+- data-pipeline-deployment.yaml

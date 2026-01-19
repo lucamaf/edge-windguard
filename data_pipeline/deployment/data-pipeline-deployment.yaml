@@ -1,39 +1,24 @@
-# apiVersion: Specifies the Kubernetes API version to use
 apiVersion: apps/v1
-# kind: Specifies the type of Kubernetes object
 kind: Deployment
-# metadata: Data that helps uniquely identify the object
 metadata:
-  # Name of the Deployment
   name: data-pipeline-deployment
   namespace: windguard
-  # Labels to apply to this Deployment
   labels:
     app: data-pipeline
-# spec: The desired state for the Deployment
 spec:
-  # The number of desired instances (Pods)
   replicas: 1
-  # selector: How the Deployment finds which Pods to manage
   selector:
     matchLabels:
       app: data-pipeline
-  # template: The blueprint for the Pods
   template:
     metadata:
-      # Labels to apply to each Pod created by this template
       labels:
         app: data-pipeline
     spec:
       containers:
-      # The list of containers to run in the Pod
       - name: data-pipeline
-        # IMPORTANT: Replace this with the actual path to your image
         image: quay.io/luferrar/windguard:data-pipeline
-        # The command to run in the container, taken from your Containerfile CMD
         command: ["python", "data_pipeline.py"]
-        # Environment variables from your Containerfile's ENV instructions
-        # These should point to your services within the Kubernetes cluster
         env:
         - name: MQTT_BROKER_ADDRESS
           value: "mosquitto.mqtt-broker.svc.cluster.local" # Updated for K8s service name
