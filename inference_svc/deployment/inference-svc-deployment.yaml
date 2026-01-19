@@ -8,6 +8,7 @@ spec:
     containers:
       - name: kserve-container
         image: quay.io/luferrar/windguard:custom
+        imagePullPolicy: Always
         ports:
           - containerPort: 8080
             name: http-port

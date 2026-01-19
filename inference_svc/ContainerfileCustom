@@ -1,12 +1,12 @@
 # saved as quay.io/luferrar/windguard:custom
-FROM quay.io/fedora/python-311
+FROM quay.io/fedora/python-312
 
 LABEL org.opencontainers.image.description="This is a fault custom predictor based on ONNX model for KServe"
 LABEL org.opencontainers.image.source="https://github.com/lucamaf/edge-windguard"
 
 WORKDIR /app
 
-COPY requirements-custom.txt requirements.txt
+COPY requirements.txt requirements.txt
 
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt

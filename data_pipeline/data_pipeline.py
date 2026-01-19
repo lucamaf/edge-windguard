@@ -25,7 +25,7 @@ MQTT_TOPIC_FAULT = os.getenv("MQTT_TOPIC_FAULT", "windguard/fault/prediction")
 MQTT_TOPIC_MONITORING = os.getenv("MQTT_TOPIC_MONITORING", "windguard/monitoring")
 
 # Prediction Service Configuration
-SCORING_API_URL = os.getenv("SCORING_API_URL", "http://127.0.0.1:5000/predict")
+SCORING_API_URL = os.getenv("SCORING_API_URL", "http://127.0.0.1:8080/predict")
 
 # Data Source Configuration
 DATA_PATH = os.getenv("DATA_PATH", "iiot-combined-dataset.csv")

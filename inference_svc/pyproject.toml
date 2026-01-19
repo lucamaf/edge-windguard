@@ -1,0 +1,12 @@
+[project]
+name = "kserve-onnx-predictor"
+version = "0.1.0"
+description = "Predictor faults"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "kserve>=0.15.0",
+    "numpy>=1.26.4",
+    "onnxruntime>=1.21.0",
+    "flask"
+]

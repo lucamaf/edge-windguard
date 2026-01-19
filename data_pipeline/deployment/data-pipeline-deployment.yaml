@@ -19,6 +19,7 @@ spec:
       - name: data-pipeline
         image: quay.io/luferrar/windguard:data-pipeline
         command: ["python", "data_pipeline.py"]
+        imagePullPolicy: Always
         env:
         - name: MQTT_BROKER_ADDRESS
           value: "mosquitto.mqtt-broker.svc.cluster.local" # Updated for K8s service name
@@ -29,11 +30,15 @@ spec:
         - name: MQTT_PASSWORD
           value: "password"    
         - name: SCORING_API_URL
-          value: "http://onnx-model-predictor.windguard.svc.cluster.local:8080/v1/models/onnx-model:predict" # Updated for K8s service name
+          value: "http://onnx-model-predictor.windguard.svc.cluster.local/v1/models/onnx-model:predict" # Updated for K8s service name
         - name: DATA_PATH
           value: "/app/iiot-combined-dataset.csv" # This path is inside the container
-
-        # It's good practice to set resource requests and limits
+        - name: MQTT_TOPIC_FEATURES
+          value: "windguard/features"
+        - name: MQTT_TOPIC_FAULT
+          value: "windguard/fault/prediction"
+        - name: MQTT_TOPIC_MONITORING
+          value: "windguard/monitoring"
         resources:
           requests:
             memory: "128Mi"

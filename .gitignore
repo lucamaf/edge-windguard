@@ -210,6 +210,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+.python-version
+uv.lock
 
 # Marimo
 marimo/_static/
