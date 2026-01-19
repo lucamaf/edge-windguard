@@ -43,6 +43,20 @@ edge-windguard/
 *(Note: `dataset_old`, Isolation Forest files, and `apps-description` are deprecated.)*
 
 ---
+## Dependency Management with uv
+
+The inference_svc utilizes `uv`, an extremely fast Python package installer and resolver, to manage its environment.
+
+To update or regenerate the requirements.txt for this specific service:
+
+```Bash
+cd inference_svc
+# Generate a pinned requirements file
+uv pip compile pyproject.toml -o requirements.txt
+```
+
+This ensures that the KServe container environment is reproducible and installs significantly faster during the CI/CD build process.
+---
 
 ## Model Training & Persistence
 
