@@ -52,6 +52,9 @@ To update or regenerate the requirements.txt for this specific service:
 ```Bash
 cd inference_svc
 # Generate a pinned requirements file
+uv python pin 3.12.12
+uv init --package
+uv sync
 uv pip compile pyproject.toml -o requirements.txt
 ```
 
@@ -96,7 +99,12 @@ kubectl apply -f inference_svc/isvc.yaml
 kubectl apply -f data_pipeline/deployment.yaml
 
 ```
-
+> NOTE on KServe
+> When you deploy the InferenceService, KServe automatically creates the underlying Kubernetes Service and routing infrastructure (VirtualServices if using Istio).  
+> You do not need to manually define a Service object for the predictor; the data pipeline can reach the inference endpoint via the URL provided by KServe after the service reaches a "Ready" state:  
+>```Bash
+>kubectl -n windguard get inferenceservices onnx-model
+>```
 ---
 
 

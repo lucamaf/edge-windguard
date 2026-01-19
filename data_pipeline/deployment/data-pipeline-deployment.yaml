@@ -30,7 +30,7 @@ spec:
         - name: MQTT_PASSWORD
           value: "password"    
         - name: SCORING_API_URL
-          value: "http://onnx-model-predictor.windguard.svc.cluster.local/v1/models/onnx-model:predict" # Updated for K8s service name
+          value: "http://onnx-model-predictor.windguard.svc.cluster.local:8080/predict" # Updated for K8s service name
         - name: DATA_PATH
           value: "/app/iiot-combined-dataset.csv" # This path is inside the container
         - name: MQTT_TOPIC_FEATURES
