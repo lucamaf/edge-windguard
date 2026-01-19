@@ -59,8 +59,21 @@ uv pip compile pyproject.toml -o requirements.txt
 ```
 
 This ensures that the KServe container environment is reproducible and installs significantly faster during the CI/CD build process.
----
 
+---
+## Dataset Information
+
+The model training and simulation are based on the IIoT Data of Wind Turbine dataset, as explored in the [IIoT Wind Turbine Analytics Kaggle](https://www.kaggle.com/code/yohanesnuwara/iiot-wind-turbine-analytics/notebook) notebook by Yohanes Nuwara.
+
+The dataset contains real-world industrial IoT telemetry including:  
+
+- *scada_data.csv*: Over 60 high-dimensional features recorded by SCADA systems (Wind Speed, Power, Temperature, etc.).
+- *fault_data.csv*: Labeled fault types and timestamps for supervised learning.
+- *status_data.csv*: Descriptions of operational states.
+
+This data originates from the Microsoft Azure Predictive Maintenance Template, providing a robust foundation for identifying failure patterns in critical energy infrastructure.
+
+---
 ## Model Training & Persistence
 
 The core intelligence of the system is developed in the **`iiot-wind-turbine-train-test-persist.ipynb`** notebook. This notebook follows a structured pipeline:
