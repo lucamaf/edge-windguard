@@ -36,7 +36,6 @@ spec:
     - grpc-v2
   containers:
     - name: kserve-container
-    # changeme: replace with the actual OVMS image
       image: quay.io/luferrar/windguard:model
       # 
       args:

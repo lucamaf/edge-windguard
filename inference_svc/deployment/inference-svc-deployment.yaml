@@ -1,7 +1,6 @@
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
-  # container image name
   name: onnx-model
   namespace: windguard
 spec:
@@ -9,3 +8,13 @@ spec:
     containers:
       - name: kserve-container
         image: quay.io/luferrar/windguard:custom
+        ports:
+          - containerPort: 8080
+            name: http-port
+        resources:
+          limits:
+            cpu: 2
+            memory: 2Gi
+          requests:
+            cpu: 1
+            memory: 1Gi

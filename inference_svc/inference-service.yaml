@@ -1,7 +1,6 @@
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
-  # container image name
   name: fault-prediction
 spec:
   predictor:

@@ -1,0 +1,2 @@
+resources:
+- inference-svc-deployment.yaml

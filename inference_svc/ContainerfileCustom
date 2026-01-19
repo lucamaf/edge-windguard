@@ -1,8 +1,8 @@
 # saved as quay.io/luferrar/windguard:custom
 FROM quay.io/fedora/python-311
 
-LABEL org.opencontainers.image.description="This is a ONNX model custom predictor for KServe"
-LABEL org.opencontainers.image.source="https://github.com/hbelmiro/kserve-onnx-predictor-demo"
+LABEL org.opencontainers.image.description="This is a fault custom predictor based on ONNX model for KServe"
+LABEL org.opencontainers.image.source="https://github.com/lucamaf/edge-windguard"
 
 WORKDIR /app
 
@@ -13,5 +13,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY models ./models
 COPY predictor.py .
+
+EXPOSE 8080
 
 CMD ["python", "predictor.py"]
