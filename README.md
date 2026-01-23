@@ -27,6 +27,7 @@ graph TD
         I[data pipeline: fault prediction] -- "Fault alerting" --> F(mqtt broker: Mosquitto broker)
         F -- "Subscribe Results" --> L[hmi: Node-RED Dashboard]
         L -- "Display Alerts" --> M{User Interface}
+        F -- "Subscribe Results" --> N[animation: web animation]
     end
 ```
 ---
