@@ -1,6 +1,6 @@
 # Edge-WindGuard
 
-**Edge-WindGuard** is a Kubernetes-native, microservice-oriented framework for the predictive maintenance of wind turbines. The system provides an end-to-end pipeline—from model training and data ingestion to real-time inference—designed to detect turbine failures using a Random Forest classifier.
+**Edge-WindGuard** is a Kubernetes-native, microservice-oriented framework for the predictive maintenance of wind turbines. The system provides an end-to-end pipeline—from model training and data ingestion to real-time inference and visualization—designed to detect turbine failures using a Random Forest classifier.
 
 ## System Architecture
 
@@ -10,6 +10,7 @@ The architecture is built on a decoupled, event-driven model. The **Data Pipelin
 2. **`train_model`**: The offline development environment. It consumes historical data from the `dataset/` folder to produce the trained Random Forest model.
 3. **`data_pipeline`**: The data producer. It reads sensor data and publishes it to the broker. In a production environment, this would interface with actual turbine PLCs or IoT gateways.
 4. **`inference_svc`**: The consumer and predictor. Deployed via **KServe**, it subscribes to the broker, runs the telemetry through the trained model, and outputs failure predictions.
+5. hmi: The visualization layer. A Node-RED dashboard that provides a real-time interface for operators.
 
 ```mermaid
 graph TD
@@ -24,6 +25,8 @@ graph TD
         H[data pipeline: power monitoring] -- "Power Generation monitoring" --> F(mqtt broker: Mosquitto broker)
         I[data pipeline: fault prediction] -- "Fault prediction" --> D[inference service: KServe]
         I[data pipeline: fault prediction] -- "Fault alerting" --> F(mqtt broker: Mosquitto broker)
+        F -- "Subscribe Results" --> L[hmi: Node-RED Dashboard]
+        L -- "Display Alerts" --> M{User Interface}
     end
 ```
 ---
@@ -36,6 +39,7 @@ edge-windguard/
 ├── train_model/      # Model development (iiot-wind-turbine-train-test-persist.ipynb)
 ├── data_pipeline/    # Data ingestion service (Requirements inside)
 ├── inference_svc/    # KServe InferenceService configuration and predictor logic
+├── hmi/              # Node-RED dashboard & K8s deployment files
 └── dataset/          # Active datasets used for training and streaming
 
 ```
@@ -85,7 +89,13 @@ The core intelligence of the system is developed in the **`iiot-wind-turbine-tra
 * **Model Persistence:** Uses `joblib` or `pickle` to serialize the final model for the **KServe** predictor.
 
 ---
+## HMI & Dashboard
 
+The HMI (Human-Machine Interface) is built with Node-RED and provides a graphical dashboard to monitor turbine performance and predictive alerts.  
+
+* Real-time Visualization: Displays live streams of wind speed, power output, and ambient temperature.  
+* Predictive Alerts: Visual indicators (gauges/leds) that change state based on the failure predictions received from the inference_svc via MQTT.
+---
 ## Setup & Execution (Kubernetes & KServe)
 
 ### 1. Requirements
@@ -110,14 +120,32 @@ kubectl apply -f inference_svc/isvc.yaml
 
 ```bash
 kubectl apply -f data_pipeline/deployment.yaml
-
 ```
+### 5. Deploy the Dashboard
+
+```bash
+# Deploy the Node-RED interface
+kubectl apply -f hmi/
+```
+
 > NOTE on KServe
 > When you deploy the InferenceService, KServe automatically creates the underlying Kubernetes Service and routing infrastructure (VirtualServices if using Istio).  
 > You do not need to manually define a Service object for the predictor; the data pipeline can reach the inference endpoint via the URL provided by KServe after the service reaches a "Ready" state:  
 >```Bash
 >kubectl -n windguard get inferenceservices onnx-model
 >```
+---
+## Tech Stack
+
+| Category | Technology |
+| --- | --- |
+| **Orchestration** | Kubernetes |
+| **ML Serving** | KServe |
+| **Visualization** | Node-RED (Dashboard 2.0) |
+| **Messaging** | MQTT (Mosquitto) |
+| **Package Management** | `uv` |
+| **ML Framework** | Scikit-learn (Random Forest) |
+
 ---
 
 
