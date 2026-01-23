@@ -184,7 +184,8 @@
         "y": 100,
         "wires": [
             [
-                "fault_logic_node"
+                "fault_logic_node",
+                "367a5166930b10db"
             ]
         ]
     },
@@ -248,7 +249,8 @@
         "y": 280,
         "wires": [
             [
-                "ui_prod_text"
+                "ui_prod_text",
+                "487b42f98b8b6dee"
             ]
         ]
     },
@@ -290,7 +292,7 @@
         "fontSize": "",
         "color": "#000000",
         "x": 600,
-        "y": 80,
+        "y": 60,
         "wires": []
     },
     {
@@ -310,7 +312,7 @@
         "font": "",
         "fontSize": "",
         "color": "#000000",
-        "x": 470,
+        "x": 490,
         "y": 280,
         "wires": []
     },
@@ -400,8 +402,8 @@
         "raw": false,
         "topic": "FAULT ALERT",
         "name": "",
-        "x": 610,
-        "y": 120,
+        "x": 620,
+        "y": 100,
         "wires": []
     },
     {
@@ -424,5 +426,101 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "487b42f98b8b6dee",
+        "type": "ui_chart",
+        "z": "8c4b2e1a.01",
+        "name": "",
+        "group": "ui_group_power",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Power History",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 480,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "367a5166930b10db",
+        "type": "ui_led2",
+        "z": "8c4b2e1a.01",
+        "order": 1,
+        "group": "ui_group_fault",
+        "width": 0,
+        "height": 0,
+        "label": "Fault alert",
+        "property": "payload",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "MF",
+                "valueType": "str"
+            },
+            {
+                "color": "#008000",
+                "value": "NF",
+                "valueType": "str"
+            },
+            {
+                "color": "#ff0000",
+                "value": "GF",
+                "valueType": "str"
+            },
+            {
+                "color": "#ffa500",
+                "value": "FF",
+                "valueType": "str"
+            },
+            {
+                "color": "#ffa500",
+                "value": "AF",
+                "valueType": "str"
+            },
+            {
+                "color": "#ff0000",
+                "value": "EF",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 390,
+        "y": 40,
+        "wires": []
     }
 ]

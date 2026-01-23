@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: animation-deployment
+  namespace: windguard
+  labels:
+    app: animation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: animation
+  template:
+    metadata:
+      labels:
+        app: animation
+    spec:
+      containers:
+      - name: animation
+        image: quay.io/luferrar/windguard:animation
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m" # 0.25 of a CPU core
+          limits: 
+            memory: "1Gi"
+            cpu: "500m" # 0.5 of a CPU core 

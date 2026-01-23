@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "node-red-contrib-ui-led2": "~0.4.19",
         "node-red-dashboard": "~3.6.6"
     }
 }

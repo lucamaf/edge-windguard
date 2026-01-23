@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: animation-nodeport
+  namespace: windguard
+spec:
+  type: NodePort 
+  ports:
+    - name: http-port
+      nodePort: 30880
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: animation
