@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-red-deployment
+  namespace: windguard
+  labels:
+    app: node-red
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-red
+  template:
+    metadata:
+      labels:
+        app: node-red
+    spec:
+      containers:
+      - name: node-red
+        image: quay.io/luferrar/windguard:hmi
+        imagePullPolicy: Always
+        env:
+        - name: MQTT_HOST
+          value: "mosquitto.mqtt-broker.svc.cluster.local" # Updated for K8s service name
+        - name: MQTT_PORT
+          value: "1883"
+        - name: MQTT_USER
+          value: "admin"
+        - name: MQTT_PWD
+          value: "password"    
+        ports:
+        - containerPort: 1880
+          name: http
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m" # 0.25 of a CPU core
+          limits: 
+            memory: "1Gi"
+            cpu: "500m" # 0.5 of a CPU core 

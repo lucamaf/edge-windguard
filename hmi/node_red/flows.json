@@ -1,0 +1,428 @@
+[
+    {
+        "id": "8c4b2e1a.01",
+        "type": "tab",
+        "label": "IIOT Wind Turbine Dashboard",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "mqtt_broker_node",
+        "type": "mqtt-broker",
+        "name": "Local Mosquitto",
+        "broker": "${MQTT_HOST}",
+        "port": "${MQTT_PORT}",
+        "clientid": "nodered-ui",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": "5",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ui_tab_main",
+        "type": "ui_tab",
+        "name": "Wind Turbine Monitor",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "ui_group_fault",
+        "type": "ui_group",
+        "name": "System Health & Fault Status",
+        "tab": "ui_tab_main",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_group_power",
+        "type": "ui_group",
+        "name": "Power Monitoring",
+        "tab": "ui_tab_main",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_group_features",
+        "type": "ui_group",
+        "name": "Live Sensor Features",
+        "tab": "ui_tab_main",
+        "order": 3,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "34e4b94b9c62f584",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "mqtt_fault_in",
+        "type": "mqtt in",
+        "z": "8c4b2e1a.01",
+        "name": "",
+        "topic": "windguard/fault/prediction",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "mqtt_broker_node",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 170,
+        "y": 100,
+        "wires": [
+            [
+                "fault_logic_node"
+            ]
+        ]
+    },
+    {
+        "id": "fault_logic_node",
+        "type": "function",
+        "z": "8c4b2e1a.01",
+        "name": "Map Fault Codes",
+        "func": "const map = {\n    'GF': { label: 'Generator Heating Fault', color: 'red', alert: true },\n    'NF': { label: 'System Healthy', color: 'green', alert: false },\n    'MF': { label: 'Mains Failure Fault', color: 'red', alert: true },\n    'FF': { label: 'Feeding Fault', color: 'orange', alert: true },\n    'AF': { label: 'Air Cooling Fault', color: 'orange', alert: true },\n    'EF': { label: 'Excitation Fault', color: 'red', alert: true }\n};\n\nconst status = map[msg.payload] || { label: 'Unknown State: ' + msg.payload, color: 'grey', alert: false };\n\nmsg.payload = status.label;\nmsg.color = status.color;\n\n// Send notification if it's an actual fault\nif (status.alert) {\n    node.send([msg, { payload: \"CRITICAL: \" + status.label }]);\n} else {\n    node.send([msg, null]);\n}\nreturn;",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 100,
+        "wires": [
+            [
+                "ui_fault_text"
+            ],
+            [
+                "ui_notification"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_wind_in",
+        "type": "mqtt in",
+        "z": "8c4b2e1a.01",
+        "name": "",
+        "topic": "windguard/monitoring/windspeed",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "mqtt_broker_node",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 190,
+        "y": 200,
+        "wires": [
+            [
+                "ui_wind_gauge",
+                "ui_wind_chart"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_prod_in",
+        "type": "mqtt in",
+        "z": "8c4b2e1a.01",
+        "name": "",
+        "topic": "windguard/monitoring/production_kwh",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "mqtt_broker_node",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 210,
+        "y": 280,
+        "wires": [
+            [
+                "ui_prod_text"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_features_in",
+        "type": "mqtt in",
+        "z": "8c4b2e1a.01",
+        "name": "",
+        "topic": "windguard/features/#",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "mqtt_broker_node",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 170,
+        "y": 380,
+        "wires": [
+            [
+                "ui_template_feature_list"
+            ]
+        ]
+    },
+    {
+        "id": "ui_fault_text",
+        "type": "ui_text",
+        "z": "8c4b2e1a.01",
+        "group": "ui_group_fault",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Status: ",
+        "format": "<span style='color:{{msg.color}}; font-weight:bold; font-size:1.2em;'>{{msg.payload}}</span>",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 600,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "ui_prod_text",
+        "type": "ui_text",
+        "z": "8c4b2e1a.01",
+        "group": "ui_group_power",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Total Production: ",
+        "format": "{{msg.payload}} kWh",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 470,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ui_wind_gauge",
+        "type": "ui_gauge",
+        "z": "8c4b2e1a.01",
+        "name": "",
+        "group": "ui_group_power",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Avg Windspeed",
+        "label": "m/s",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "30",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 480,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ui_wind_chart",
+        "type": "ui_chart",
+        "z": "8c4b2e1a.01",
+        "name": "",
+        "group": "ui_group_power",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Windspeed History",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "30",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 470,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ui_notification",
+        "type": "ui_toast",
+        "z": "8c4b2e1a.01",
+        "position": "top right",
+        "displayTime": "5",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "topic": "FAULT ALERT",
+        "name": "",
+        "x": 610,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "ui_template_feature_list",
+        "type": "ui_template",
+        "z": "8c4b2e1a.01",
+        "group": "ui_group_features",
+        "name": "Feature Value List",
+        "order": 1,
+        "width": "12",
+        "height": "6",
+        "format": "<div style=\"height:100%; overflow-y:auto; font-family:monospace;\">\n    <table style=\"width:100%; border-collapse:collapse;\">\n        <thead>\n            <tr style=\"background:#333; color:white;\">\n                <th style=\"text-align:left; padding:5px;\">Sensor</th>\n                <th style=\"text-align:right; padding:5px;\">Value</th>\n            </tr>\n        </thead>\n        <tbody id=\"feature-body\">\n        </tbody>\n    </table>\n</div>\n\n<script>\n(function(scope) {\n    const sensors = {};\n    scope.$watch('msg', function(msg) {\n        if (!msg) return;\n        const topicParts = msg.topic.split('/');\n        const name = topicParts[topicParts.length - 1];\n        sensors[name] = msg.payload;\n        \n        const tbody = document.getElementById('feature-body');\n        let html = '';\n        for (const [key, val] of Object.entries(sensors)) {\n            html += `<tr><td style=\"padding:4px; border-bottom:1px solid #eee;\">${key}</td><td style=\"text-align:right; padding:4px; border-bottom:1px solid #eee;\">${val}</td></tr>`;\n        }\n        tbody.innerHTML = html;\n    });\n})(scope);\n</script>",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 450,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    }
+]

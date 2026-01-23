@@ -1,0 +1,3 @@
+resources:
+- node-red-deployment.yaml
+- node-red-node.yaml
