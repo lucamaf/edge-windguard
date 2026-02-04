@@ -45,7 +45,7 @@ spec:
         app: mosquitto
     spec:
       containers:
-        - image: eclipse-mosquitto:latest
+        - image: docker.io/library/eclipse-mosquitto:latest
           name: mosquitto
           ports:
           - containerPort: 1883
